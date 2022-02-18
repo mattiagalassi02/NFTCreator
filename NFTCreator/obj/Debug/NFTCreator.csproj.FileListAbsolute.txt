@@ -1,0 +1,8 @@
+C:\Users\Mattia Galassi\Desktop\NFTCreator\NFTCreator\bin\Debug\NFTCreator.exe.config
+C:\Users\Mattia Galassi\Desktop\NFTCreator\NFTCreator\bin\Debug\NFTCreator.exe
+C:\Users\Mattia Galassi\Desktop\NFTCreator\NFTCreator\bin\Debug\NFTCreator.pdb
+C:\Users\Mattia Galassi\Desktop\NFTCreator\NFTCreator\obj\Debug\NFTCreator.csproj.AssemblyReference.cache
+C:\Users\Mattia Galassi\Desktop\NFTCreator\NFTCreator\obj\Debug\NFTCreator.csproj.SuggestedBindingRedirects.cache
+C:\Users\Mattia Galassi\Desktop\NFTCreator\NFTCreator\obj\Debug\NFTCreator.csproj.CoreCompileInputs.cache
+C:\Users\Mattia Galassi\Desktop\NFTCreator\NFTCreator\obj\Debug\NFTCreator.exe
+C:\Users\Mattia Galassi\Desktop\NFTCreator\NFTCreator\obj\Debug\NFTCreator.pdb

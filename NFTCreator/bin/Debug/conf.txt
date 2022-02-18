@@ -1,0 +1,16 @@
+#I dati seguenti servono a configurare il programma
+#formattare i dati nel seguente modo:
+#nome_livello=range_livello;nome_cartella_file_livello
+#si può specificare il percorso assoluto della cartella o solo il nome
+#(in tal caso viene preso di default la cartella corrente)
+#il cancelletto è il carattere per i commenti 
+#usare la parola range per spcificare il numero di nft 
+#separare ventuali dati con il ';'
+
+accessories=6;accessories
+background=3;background
+body=2;body
+cigarette=4;cigarette
+clothes=8;clothes
+hair=8;hair
+range=20

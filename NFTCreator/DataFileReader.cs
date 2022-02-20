@@ -20,6 +20,7 @@ namespace NFTCreator
         private List<string> levels; 
         private List<int> ranges;
         private List<string> directories;
+        private List<string> order; 
         private int rangeTot; 
 
         /// <summary>
@@ -32,6 +33,7 @@ namespace NFTCreator
             levels = new List<string>();
             directories = new List<string>();
             ranges = new List<int>(); 
+            order = new List<string>();
 
             if (!File.Exists(fileName))
                 generateDefaultFile(fileName);
@@ -66,9 +68,27 @@ namespace NFTCreator
             }
             //aggiungo la riga del range 
             writer.WriteLine("range"+DATA_RECOGNIZER+DEFAULT_RANGE);
+            //aggiungo la riga dell'ordine 
+
+            writer.Write("order" + DATA_RECOGNIZER);
+            defaultOrder();
+            for (int i = 0;i < order.Count;i++)
+            {
+                writer.Write(order[i]); 
+
+                if(i != (order.Count - 1))//se non è l'ultimo metto la virgola 
+                    writer.Write(DATA_SEPARATOR); 
+            }
+
+
             writer.Close();
             rangeTot = DEFAULT_RANGE;
             dataAvaiable = true;
+        }
+        private void defaultOrder()
+        {
+            foreach(string level in levels)
+                order.Add(level);
         }
         private void readData(string fileName)
         {
@@ -92,6 +112,14 @@ namespace NFTCreator
                         if(vs[0].ToLower().Equals("range"))
                         {
                             rangeTot = Int32.Parse(vs[1]);
+                        }
+                        else if(vs[0].ToLower().Equals("order"))//se la parola è orine lo salvo 
+                        {
+
+                            string[] orderlevel = vs[1].Split(DATA_SEPARATOR); 
+                            foreach(string level in orderlevel)
+                                order.Add(level.ToLower());
+
                         }
                         else
                         {
@@ -128,6 +156,13 @@ namespace NFTCreator
                 foreach (string s in levels)
                     tmp.Add(s);
                 return tmp;
+            }
+        }
+        public string[] Order
+        {
+            get
+            {
+                return order.ToArray();
             }
         }
         public List<string> Directories

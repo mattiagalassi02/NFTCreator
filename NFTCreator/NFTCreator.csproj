@@ -35,6 +35,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataFileReader.cs" />
+    <Compile Include="LevelMerger.cs" />
     <Compile Include="NFTCollector.cs" />
     <Compile Include="NFTSkin.cs" />
     <Compile Include="Program.cs" />

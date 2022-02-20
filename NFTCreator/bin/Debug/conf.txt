@@ -14,3 +14,4 @@ cigarette=4;cigarette
 clothes=8;clothes
 hair=8;hair
 range=20
+order=accessories;background;body;cigarette;clothes;hair

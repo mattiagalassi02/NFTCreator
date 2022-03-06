@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO; 
 
 namespace NFTCreator
 {
@@ -14,9 +15,10 @@ namespace NFTCreator
         private string[] order;
         private ImageFormat format;
         private string name;
-        private string directory; 
+        private string directory;
+        private string saving_folder; 
 
-        public LevelMerger(Dictionary<string, string> fileNames, string[] _order, string resName )
+        public LevelMerger(Dictionary<string, string> fileNames, string[] _order, string savingFolder,string resName )
         {
             //controllo che la lunghezza dei livelli sia la stessa dell'ordine
             if (fileNames.Keys.Count != _order.Length || resName == null) throw new ArgumentException("Illegal Parameters");
@@ -30,7 +32,14 @@ namespace NFTCreator
                     throw new ArgumentException("Illegal Parameters");
             }
             name = resName;
-            directory = Environment.CurrentDirectory; 
+
+            //controllo se esiste la cartella di out altrimenti la creo 
+
+            directory = savingFolder; 
+            DirectoryInfo dir = new DirectoryInfo(directory);
+            if(!dir.Exists)
+                dir.Create();
+
             format = ImageFormat.Png;
         }
 
@@ -60,7 +69,7 @@ namespace NFTCreator
             //creo il bitmap dell'timmagine
             Bitmap image = CombineBitmap();
             //salvo l'immagine con gli argomenti specificati 
-            image.Save(directory +"\\"+ name, format);
+            image.Save(directory +"\\"+ name +".png", format);
         }
         private Bitmap CombineBitmap()
         {

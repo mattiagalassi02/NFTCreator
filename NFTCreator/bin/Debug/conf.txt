@@ -7,11 +7,10 @@
 #usare la parola range per spcificare il numero di nft 
 #separare ventuali dati con il ';'
 
-accessories=6;accessories
 background=3;background
 body=2;body
-cigarette=4;cigarette
-clothes=8;clothes
-hair=8;hair
-range=20
-order=accessories;background;body;cigarette;clothes;hair
+clothes=3;clothes
+range=6
+name=EVE_
+out_folder=C:\Users\Mattia Galassi\Desktop\NFTCreator\NFTCreator\bin\Debug\nft
+order=background;body;clothes

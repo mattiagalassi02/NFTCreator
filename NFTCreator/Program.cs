@@ -12,28 +12,62 @@ namespace NFTCreator
     {
         static void Main(string[] args)
         {
-            DataFileReader reader = new DataFileReader("conf.txt");
+            try
+            {
+                DataFileReader reader = new DataFileReader("conf.txt");
 
-            List<string> level = reader.Levels;
+                List<string> levels = reader.Levels;
 
-            List<int> ranges = reader.Ranges;
+                List<int> ranges = reader.Ranges;
 
-            NFTCollector collector = new NFTCollector(level, ranges, 20);
+                List<string> directories = reader.Directories;
 
-            while (collector.HasNext)
-                Console.WriteLine(collector.next());
+                List<string> order = new List<string>(reader.Order);
 
-            Console.WriteLine(collector);
-            //Dictionary<string, string> t = new Dictionary<string, string>();
-            //t.Add("1", "1.jpg");
-            //t.Add("2", "2.png");
-            //t.Add("3", "3.png");
+                int range = reader.NFTRange;
 
-            //string[] order = { "2", "1", "3" };
+                string saving_folder = reader.SavingFolder;
 
-            //LevelMerger merger = new LevelMerger(t, order, "res.png"); 
-            //merger.mergeImages();
+                string name = reader.Name;
 
+                NFTCollector collector = new NFTCollector(levels, ranges, directories, order, range);
+
+                int counter = 1; 
+
+                while (collector.HasNext)
+                {
+                    //genero l'nft e gli setto il nome 
+                    NFTSkin nft = collector.next();
+
+                    nft.Name = name + counter.ToString();
+                    counter++;
+
+
+                    //mi costruisco un dizionario con le coppie 
+                    //nome livello - nome file da usare
+
+                    Dictionary<string, string> setter = new Dictionary<string, string>();
+
+                    foreach (string level in levels)
+                        setter[level] = nft.getFileName(level);
+
+                    LevelMerger merger = new LevelMerger(setter, order.ToArray(), saving_folder ,nft.Name);
+                    merger.mergeImages();
+
+                    Console.WriteLine("NFT "+(counter-1)+" successfully created!"+"\n");
+                    Console.WriteLine("------------------ DATA ------------------");
+                    Console.WriteLine(nft);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
+            Console.WriteLine("Press ENTER to close");
 
             Console.ReadLine();
            

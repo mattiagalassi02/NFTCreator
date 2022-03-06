@@ -11,17 +11,24 @@ namespace NFTCreator
         private List<string> codeList;
         private List<string> levelNames;
         private List<int> levelRange;
+        private List<string> order;
+
+        private List<string> directories;
         private int range; 
 
 
-        public NFTCollector(List<string> levels, List<int> rangeForLevel, int rangeCollection)
+        public NFTCollector(List<string> levels, List<int> rangeForLevel, List<string> levelDirectories , List<string> levelOrder, int rangeCollection)
         {
-            if (levels.Count != rangeForLevel.Count) throw new ArgumentException("Invalid lists"); 
-            if(rangeCollection < 0 ) throw new ArgumentException("Invalid range");
+            if (levels.Count != rangeForLevel.Count) throw new ArgumentException("Invalid lists");
+            if (levels.Count != levelDirectories.Count) throw new ArgumentException("Invalid lists");
+            if (levels.Count != levelOrder.Count) throw new ArgumentException("Invalid lists");
+            if (rangeCollection < 0 ) throw new ArgumentException("Invalid range");
             codeList = new List<string>();
             levelNames = levels; 
             levelRange = rangeForLevel;
             range = rangeCollection;
+            order = levelOrder; 
+            directories = levelDirectories;
         }
         /// <summary>
         /// Genero i codici casuali degli nft
@@ -37,7 +44,7 @@ namespace NFTCreator
                 {
                     bool find = false;
 
-                    nft = new NFTSkin(levelNames, levelRange);
+                    nft = new NFTSkin(levelNames, levelRange, order);
                     do
                     {
                         string code = nft.Code;
@@ -52,9 +59,15 @@ namespace NFTCreator
                     } while (!find) ;
 
                 }
+                //aggiungo le cartelle all'nft
+                for(int i = 0; i < levelNames.Count; i++)
+                {
+                    nft.setDirectory(levelNames[i], directories[i]); 
+                }
+          
 
                 return nft;
-            }
+        }
         /// <summary>
         /// Ritorno vero se ho un prossimo nft (non ho finito il range)
         /// e falso se ho terminato la generazione

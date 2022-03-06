@@ -12,7 +12,10 @@ namespace NFTCreator
         private const char COMMENT_RECOGNIZER = '#';
         private const char DATA_RECOGNIZER = '='; 
         private const char DATA_SEPARATOR = ';';
-        private const int DEFAULT_RANGE = 20;
+        private const int DEFAULT_RANGE = 6;
+        private const string NAME = "EVE_";
+        private string SAVING_FOLDER; 
+
         //variabile booleana che mi serve per capire se,
         //una volta generato il file di defualt non devo effettuare la lettura 
         private bool dataAvaiable;
@@ -21,7 +24,8 @@ namespace NFTCreator
         private List<int> ranges;
         private List<string> directories;
         private List<string> order; 
-        private int rangeTot; 
+        private int rangeTot;
+        private string name; 
 
         /// <summary>
         /// Controllo se il file esiste e ne eseguo la lettura
@@ -42,32 +46,59 @@ namespace NFTCreator
                 readData(fileName); 
         }
         private void generateDefaultFile(string fileName)
-        {
+        { 
+
+            //la cartella dove mettere gli nft generati 
+            SAVING_FOLDER = Environment.CurrentDirectory + "\\nft"; 
+            //-------------------------------------------------------
             string currentdir = Environment.CurrentDirectory;
             //creo una lista di cartelle prelevando quelle locali 
             List<string> curr_dir = new List<string>(Directory.GetDirectories(currentdir));
             //ora per ogni cartella vado a leggere il numero di file interni e 
             //creo il record da scrivere su file 
             StreamWriter writer = new StreamWriter(new FileStream("conf.txt", FileMode.Create));
+
+            //scrivo il trailer del file 
+
+            writer.WriteLine(@"#I dati seguenti servono a configurare il programma
+#formattare i dati nel seguente modo:
+#nome_livello=range_livello;nome_cartella_file_livello
+#si può specificare il percorso assoluto della cartella o solo il nome
+#(in tal caso viene preso di default la cartella corrente)
+#il cancelletto è il carattere per i commenti 
+#usare la parola range per spcificare il numero di nft 
+#separare ventuali dati con il ';'
+"); 
+
             string dir = ""; 
 
             for (int i = 0; i < curr_dir.Count; i++)
             {
                 dir = curr_dir[i];
-                //prelevo numero file della cartella
-                int numFiles = Directory.GetFiles(dir).Length;
-                ranges.Add(numFiles);
-                //dir è il percorso assoluto e mi serve solo la cartella relativa
-                string[] tmp = dir.Split('\\');
-                dir = tmp[tmp.Length - 1]; 
+                //da questo processo escludo la cartella nft che assumo possa essere quella out di defult 
+                if (dir!=SAVING_FOLDER)
+                {
+                    //prelevo numero file della cartella
+                    int numFiles = Directory.GetFiles(dir).Length;
+                    ranges.Add(numFiles);
+                    //dir è il percorso assoluto e mi serve solo la cartella relativa
+                    string[] tmp = dir.Split('\\');
+                    dir = tmp[tmp.Length - 1];
 
-                levels.Add(dir);
-                directories.Add(dir);
+                    levels.Add(dir);
+                    directories.Add(dir);
 
-                writer.WriteLine(dir+DATA_RECOGNIZER+numFiles+DATA_SEPARATOR+dir); 
+                    writer.WriteLine(dir + DATA_RECOGNIZER + numFiles + DATA_SEPARATOR + dir);
+                }
+
             }
             //aggiungo la riga del range 
             writer.WriteLine("range"+DATA_RECOGNIZER+DEFAULT_RANGE);
+            //aggiungo la riga del nome 
+            writer.WriteLine("name" + DATA_RECOGNIZER + NAME);
+            name = NAME;
+            //aggiungo la riga dell'out folder
+            writer.WriteLine("out_folder" + DATA_RECOGNIZER + SAVING_FOLDER);
             //aggiungo la riga dell'ordine 
 
             writer.Write("order" + DATA_RECOGNIZER);
@@ -113,13 +144,21 @@ namespace NFTCreator
                         {
                             rangeTot = Int32.Parse(vs[1]);
                         }
-                        else if(vs[0].ToLower().Equals("order"))//se la parola è orine lo salvo 
+                        else if(vs[0].ToLower().Equals("order"))//se la parola è ordine lo salvo 
                         {
 
                             string[] orderlevel = vs[1].Split(DATA_SEPARATOR); 
                             foreach(string level in orderlevel)
                                 order.Add(level.ToLower());
 
+                        }
+                        else if (vs[0].ToLower().Equals("name"))//se la parola è nome lo salvo 
+                        {
+                            name = vs[1].Trim();
+                        }
+                        else if (vs[0].ToLower().Equals("out_folder"))//se la parola è nome lo salvo 
+                        {
+                            SAVING_FOLDER = vs[1].Trim();
                         }
                         else
                         {
@@ -187,6 +226,12 @@ namespace NFTCreator
         }
         public int NFTRange
         { get { return rangeTot; } }
+
+        public string Name 
+        { get { return name; } }
+
+        public string SavingFolder
+        { get { return SAVING_FOLDER; } }
 
     }
 }

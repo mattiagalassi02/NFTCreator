@@ -17,6 +17,8 @@ namespace NFTCreator
         private Dictionary<string, string> dir_level;
         //contiene le associazioni livello - numero scelto per livello
         private Dictionary<string, int> level_number;
+        //lista che determina l'ordine degli elementi
+        private List<string> order;
 
         private string name;
         private string code;
@@ -26,15 +28,29 @@ namespace NFTCreator
         /// possieda tael livello
         /// </summary>
         /// <param name="data"></param>
-        public NFTSkin(List<string> levelNames, List<int> rangeForLever)
+        public NFTSkin(List<string> levelNames, List<int> rangeForLever, List<string> levelOrder)
         {
             if (levelNames.Count != rangeForLever.Count) throw new ArgumentException("Invalid arguments for levels");
+            //controllo che l'ordine contenga livelli ammissibili
+            if(levelOrder.Count != levelNames.Count) throw new ArgumentException("Invalid arguments for levels");
+
+            foreach (string lo in levelOrder)
+            {
+                if(!levelNames.Contains(lo)) throw new ArgumentException("Invalid order for levels");
+            }
 
             el_level = new Dictionary<string, int>();
 
             for (int i = 0; i < levelNames.Count; i++)
             {
                 el_level[levelNames[i]] = rangeForLever[i];
+            }
+
+            order = new List<string>();
+
+            for (int i = 0; i < levelOrder.Count; i++)
+            {
+                order.Add(levelOrder[i]);
             }
 
             setDefaultData(levelNames);
@@ -48,12 +64,12 @@ namespace NFTCreator
             //concateno tutto in una stringa 
             string value = "";
 
-            List<string> levelNames = new List<string>(el_level.Keys);
+            //ora vado a generare in ordine
 
-            for (int i = 0; i < levelNames.Count; i++)
+            for (int i = 0; i < order.Count; i++)
             {
-                level_number[levelNames[i]] = rnd.Next(0, el_level[levelNames[i]]);
-                value += level_number[levelNames[i]];
+                level_number[order[i]] = rnd.Next(1, el_level[order[i]] + 1);
+                value += level_number[order[i]];
             }
 
             code = value;
@@ -77,7 +93,7 @@ namespace NFTCreator
         }
         public override string ToString()
         {
-            return code + "\n" + getalldir();
+            return "CODE:" + code + "\n" + "NAME:" + name + "\n" + getalldir();
         }
         private string getalldir()
         {
